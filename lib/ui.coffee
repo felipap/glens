@@ -1,5 +1,4 @@
 
-
 window.openLoadDialog = ->
   $('#loadModal').modal()
 
@@ -14,24 +13,24 @@ class ui
 
   onGcodeLoaded: (gcode) ->
     console.log "OOOOOOOOOOO", gcode
-    @gp = new GcodeParser
-    @gm = gp.parse gcode
+    @gp = new GCodeParser
+    @gm = @gp.parse gcode
     @gr = new GCodeRenderer
 
-    guiControllers.gcodeIndex.max(gr.viewModels.length - 1)
+    guiControllers.gcodeIndex.max(@gr.viewModels.length - 1)
     guiControllers.gcodeIndex.setValue(0)
     guiControllers.animate.setValue(true)
 
     camera.position.z = 500
     camera.position.y = -1500
-    camera.lookAt(gr.center)
+    camera.lookAt(@gr.center)
 
     $('#loadModal').modal 'hide'
-    if object
-      @renderer.scene.remove object
+    if @object
+      @renderer.scene.remove @object
 
-    object = @gr.render @gm
-    @renderer.scene.add object
+    @object = @gr.render @gm
+    @renderer.scene.add @object
 
   constructor: () ->
 
