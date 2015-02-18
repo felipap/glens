@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta charset="utf-8">
+    <title>Glens - Gcode Viewer</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <style>
+      #renderArea {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 50px;
+        background-color: #000000;
+      }
+      .dg.main {
+        margin-top: 50px; /* watchout navbar ;) */
+      }
+
+    </style>
+    <!-- 3rd party js libs -->
+    <script src="js/coffee-script.js"></script>
+    <script src="js/modernizr.custom.28701.js"></script>
+    <script src="js/jquery-2.1.3.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/sugar-1.4.1.min.js"></script>
+    <script src="js/three.min.js"></script>
+    <script src="js/three.trackball-controls.js"></script>
+    <script src="js/dat.gui.min.js"></script>
+    <script src="js/stats.min.js"></script>
+
+    <script src="js/ShaderExtras.js"></script>
+    <script src="js/postprocessing/EffectComposer.js"></script>
+    <script src="js/postprocessing/MaskPass.js"></script>
+    <script src="js/postprocessing/RenderPass.js"></script>
+    <script src="js/postprocessing/ShaderPass.js"></script>
+    <script src="js/postprocessing/BloomPass.js"></script>
+
+    <!-- US! -->
+    <script type="text/coffeescript" src="lib/parser.coffee"></script>
+    <script type="text/coffeescript" src="lib/gmodel.coffee"></script>
+    <script type="text/coffeescript" src="lib/importer.coffee"></script>
+    <script type="text/coffeescript" src="lib/renderer.coffee"></script>
+    <script type="text/coffeescript" src="lib/ui.coffee"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">
+            <img alt="Brand" src="/delta.png" style="display: inline-block" height=20>
+            <span style="font-weight: bold; vertical-align: middle">Glens</span>
+          </a>
+          <div class="navbar-text">A Delta Thinkers Production</div>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li>
+              <button class="btn btn-info navbar-btn" onClick="openLoadDialog()">
+                Load Gcode
+              </button>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a href="http://github.com/deltathinkers/glens">
+                Check us out on <strong>Github</strong>!
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div id="renderArea"></div>
+
+    <div class="modal fade" id="loadModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Open GCode</h4>
+          </div>
+          <div class="modal-body">
+            <h4>Examples</h4>
+            <ul class="gcode_examples">
+              <li><a href="examples/15mm_cube.gcode">15mm_cube.gcode</a></li>
+              <li><a href="examples/octocat.gcode">octocat.gcode</a></li>
+              <li><a href="examples/part.gcode">part.gcode</a></li>
+            </ul>
+            <p>To view your own model, <strong>drag a gcode file from your desktop and drop it in this window</strong>.</p>
+          </div>
+          <div class="modal-footer">
+            <a class="btn" data-dismiss="modal">Cancel</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>
