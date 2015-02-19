@@ -17,9 +17,8 @@ class Renderer
     @composer.reset()
 
   onGcodeLoaded: (gcode) ->
-    @gp = new GCodeParser
     @gr = new GCodeRenderer
-    @gm = @gp.parse gcode
+    @gm = ParseGCode(gcode)
     gcodeObj = @gr.render(@gm)
 
     window.gr = @gr
