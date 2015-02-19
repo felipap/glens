@@ -10,7 +10,7 @@ window.effectController =
 
 class ui
 
-  duiControllers =
+  duiControllers:
     gcodeIndex: null
     animate: null
 
@@ -18,28 +18,8 @@ class ui
     defaultFilePath: 'models/companion_cube.gcode'
 
   onGcodeLoaded: (gcode) ->
-    # console.log "OOOOOOOOOOO", gcode
-    @gp = new GCodeParser
-    @gm = @gp.parse gcode
-    @gr = new GCodeRenderer
-    gcodeObj = @gr.render(@gm)
-
-    duiControllers.gcodeIndex.max(@gr.viewModels.length - 1)
-    duiControllers.gcodeIndex.setValue(0)
-    duiControllers.animate.setValue(true)
-
-    @renderer.camera.position.z = 500
-    @renderer.camera.position.y = -1500
-    console.log @gr
-    @renderer.camera.lookAt(@gr.center)
-
+    @renderer.onGcodeLoaded(gcode)
     $('#loadModal').modal 'hide'
-    if @object
-      @renderer.scene.remove @object
-
-    @object = gcodeObj
-    @renderer.scene.add @object
-    console.log('render')
 
   constructor: () ->
 
@@ -65,7 +45,7 @@ class ui
 
     GCodeImporter.importPath conf.defaultFilePath, @onGcodeLoaded.bind(@)
 
-    @renderer = new Renderer $('#renderArea')[0]
+    @renderer = new Renderer $('#renderArea')[0], @
 
     @setupDatGUI()
 
@@ -75,13 +55,12 @@ class ui
     $('.dg.main').mousedown (e) ->
       e.stopPropagation()
 
-
-    duiControllers.animate = @dui.add(effectController, 'animate').listen()
-    duiControllers.gcodeIndex = @dui.add(effectController, 'gcodeIndex', 0,
+    @duiControllers.animate = @dui.add(effectController, 'animate').listen()
+    @duiControllers.gcodeIndex = @dui.add(effectController, 'gcodeIndex', 0,
       1000, 1000).listen()
-    duiControllers.gcodeIndex.onChange (val) ->
+    @duiControllers.gcodeIndex.onChange (val) =>
       if effectController.animate
-        duiControllers.animate.setValue(false)
+        @duiControllers.animate.setValue(false)
 
 
 $ -> window.ui = new ui

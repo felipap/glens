@@ -16,9 +16,30 @@ class Renderer
     @camera.aspect = width/height
     @camera.updateProjectionMatrix()
     @renderer.setSize(width, height)
-    # effectFXXA.uniform['resolution'].value.set(1/width, 1/height)
+    # @effectFXAA.uniforms['resolution'].value.set(1/width, 1/height)
     @controls.handleResize()
     @composer.reset()
+
+  onGcodeLoaded: (gcode) ->
+    @gp = new GCodeParser
+    @gm = @gp.parse gcode
+    @gr = new GCodeRenderer
+    gcodeObj = @gr.render(@gm)
+
+    @ui.duiControllers.gcodeIndex.max(@gr.viewModels.length - 1)
+    @ui.duiControllers.gcodeIndex.setValue(0)
+    @ui.duiControllers.animate.setValue(true)
+
+    @camera.position.z = 500
+    @camera.position.y = -1500
+    @camera.lookAt(@gr.center)
+
+    if @object
+      @scene.remove @object
+
+    @object = gcodeObj
+    @scene.add @object
+
 
   setupStats: ->
     @stats = new Stats
@@ -38,19 +59,20 @@ class Renderer
     @renderer.autoClear = false
     @container.appendChild(@renderer.domElement)
 
-    Lights...
-    [[ 0, 0, 1, 0xFFFFCC],
-     [ 0, 1, 0, 0xFFCCFF],
-     [ 1, 0, 0, 0xCCFFFF],
-     [ 0, 0,-1, 0xCCCCFF],
-     [ 0,-1, 0, 0xCCFFCC],
-     [-1, 0, 0, 0xFFCCCC]].forEach (position) ->
-      light = new THREE.DirectionalLight position[3]
-      light.position.set(position[0], position[1], position[2]).normalize()
-      @scene.add light
+    # Lights...
+    # [[ 0, 0, 1, 0xFFFFCC],
+    #  [ 0, 1, 0, 0xFFCCFF],
+    #  [ 1, 0, 0, 0xCCFFFF],
+    #  [ 0, 0,-1, 0xCCCCFF],
+    #  [ 0,-1, 0, 0xCCFFCC],
+    #  [-1, 0, 0, 0xFFCCCC]].forEach (position) =>
+    #   light = new THREE.DirectionalLight position[3]
+    #   light.position.set(position[0], position[1], position[2]).normalize()
+    #   @scene.add light
 
     # Create camera
-    @camera = new THREE.PerspectiveCamera(conf.fov, 1, conf.near, conf.far)
+    aspect = window.innerWidth/window.innerHeight
+    @camera = new THREE.PerspectiveCamera(conf.fov, aspect, conf.near, conf.far)
     @camera.position.z = conf.z
     @scene.add(@camera)
 
@@ -63,12 +85,12 @@ class Renderer
     effectBloom = new THREE.BloomPass(0.4)
     effectScreen = new THREE.ShaderPass(THREE.ShaderExtras["screen"])
 
-    effectFXAA = new THREE.ShaderPass THREE.ShaderExtras["fxaa"]
+    @effectFXAA = new THREE.ShaderPass THREE.ShaderExtras["fxaa"]
     effectScreen.renderToScreen = true
 
     @composer = new THREE.EffectComposer @renderer
     @composer.addPass renderModel
-    @composer.addPass effectFXAA
+    @composer.addPass @effectFXAA
     @composer.addPass effectBloom
     @composer.addPass effectScreen
 
@@ -82,12 +104,13 @@ class Renderer
 
     @setupStats()
 
-  constructor: (@container) ->
+  constructor: (@container, @ui) ->
     @init()
     @animate()
 
   animate: ->
-    requestAnimationFrame @animate.bind(@)
+    # requestAnimationFrame @animate.bind(@)
+    setTimeout @animate.bind(@), 100
     @render()
     if @stats then @stats.update()
 
@@ -99,15 +122,17 @@ class Renderer
       if autoRotate and object instanceof THREE.Object3D
         object.rotation.y = object.rotation.y + 0.015
 
-    if effectController and @gr
-      if effectController.animate
+    console.log 'oi', !!window.effectController, !!@gr
+    if window.effectController and @gr
+      if window.effectController.animate
         try
           @gr.setIndex @gr.index+1
-          effectController.gcodeIndex = @gr.index
+          window.effectController.gcodeIndex = @gr.index
         catch e
-          effectController.animate = false
+          window.effectController.animate = false
+          throw e
       else
-        @gr.setIndex effectController.gcodeIndex
+        @gr.setIndex window.effectController.gcodeIndex
 
     @controls.update()
     @renderer.clear()
