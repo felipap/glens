@@ -16,7 +16,8 @@ class Renderer
     @camera.aspect = width/height
     @camera.updateProjectionMatrix()
     @renderer.setSize(width, height)
-    # @effectFXAA.uniforms['resolution'].value.set(1/width, 1/height)
+    # if @effectFXAA
+    #   @effectFXAA.uniforms['resolution'].value.set(1/width, 1/height)
     @controls.handleResize()
     @composer.reset()
 
@@ -72,6 +73,7 @@ class Renderer
 
     # Create camera
     aspect = window.innerWidth/window.innerHeight
+    console.log aspect
     @camera = new THREE.PerspectiveCamera(conf.fov, aspect, conf.near, conf.far)
     @camera.position.z = conf.z
     @scene.add(@camera)
@@ -81,17 +83,13 @@ class Renderer
     @controls.dynamicDampingFactor = 0.1
     @controls.rotateSpeed = 1.0
 
-    renderModel = new THREE.RenderPass(@scene, @camera)
-    effectBloom = new THREE.BloomPass(0.4)
-    effectScreen = new THREE.ShaderPass(THREE.ShaderExtras["screen"])
-
-    @effectFXAA = new THREE.ShaderPass THREE.ShaderExtras["fxaa"]
-    effectScreen.renderToScreen = true
-
     @composer = new THREE.EffectComposer @renderer
-    @composer.addPass renderModel
-    @composer.addPass @effectFXAA
-    @composer.addPass effectBloom
+    @composer.addPass new THREE.RenderPass(@scene, @camera)
+    # @effectFXAA = new THREE.ShaderPass THREE.ShaderExtras["fxaa"]
+    # @composer.addPass @effectFXAA # Antialas?
+    # @composer.addPass new THREE.BloomPass(0.4)
+    effectScreen = new THREE.ShaderPass(THREE.ShaderExtras["screen"])
+    effectScreen.renderToScreen = true
     @composer.addPass effectScreen
 
     @refreshSize()
@@ -116,13 +114,12 @@ class Renderer
 
   render: ->
     time = Date.now() * 0.0005
-    console.log 'update?'
+    # console.log 'update?'
 
     for object in @scene.children
       if autoRotate and object instanceof THREE.Object3D
         object.rotation.y = object.rotation.y + 0.015
 
-    console.log 'oi', !!window.effectController, !!@gr
     if window.effectController and @gr
       if window.effectController.animate
         try
