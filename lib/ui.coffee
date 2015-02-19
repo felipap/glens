@@ -2,6 +2,12 @@
 window.openLoadDialog = ->
   $('#loadModal').modal()
 
+window.effectController =
+  gcodeIndex: 10
+  animate: false
+  speed: 0
+  color: [0, 128, 255]
+
 class ui
 
   duiControllers =
@@ -12,25 +18,28 @@ class ui
     defaultFilePath: 'models/companion_cube.gcode'
 
   onGcodeLoaded: (gcode) ->
-    console.log "OOOOOOOOOOO", gcode
+    # console.log "OOOOOOOOOOO", gcode
     @gp = new GCodeParser
     @gm = @gp.parse gcode
     @gr = new GCodeRenderer
+    gcodeObj = @gr.render(@gm)
 
-    guiControllers.gcodeIndex.max(@gr.viewModels.length - 1)
-    guiControllers.gcodeIndex.setValue(0)
-    guiControllers.animate.setValue(true)
+    duiControllers.gcodeIndex.max(@gr.viewModels.length - 1)
+    duiControllers.gcodeIndex.setValue(0)
+    duiControllers.animate.setValue(true)
 
-    camera.position.z = 500
-    camera.position.y = -1500
-    camera.lookAt(@gr.center)
+    @renderer.camera.position.z = 500
+    @renderer.camera.position.y = -1500
+    console.log @gr
+    @renderer.camera.lookAt(@gr.center)
 
     $('#loadModal').modal 'hide'
     if @object
       @renderer.scene.remove @object
 
-    @object = @gr.render @gm
+    @object = gcodeObj
     @renderer.scene.add @object
+    console.log('render')
 
   constructor: () ->
 
@@ -38,23 +47,23 @@ class ui
       alert 'Sorry, you need a WebGL capable browser to use this.'
       return false
 
-    $('.gcode_examples a').on 'click', (e) ->
+    $('.gcode_examples a').on 'click', (e) =>
       e.preventDefault()
-      GCodeImporter.importPath $(@).attr('href'), @onGcodeLoaded
+      GCodeImporter.importPath $(e.target).attr('href'), @onGcodeLoaded.bind(@)
       false
 
-    $('body').on 'dragover', (e) ->
+    $('body').on 'dragover', (e) =>
       e.stopPropagation()
       e.preventDefault()
       e.originalEvent.dataTransfer.dropEffect = 'copy'
 
-    $('body').on 'drop', (e) ->
+    $('body').on 'drop', (e) =>
       e.stopPropagation()
       e.preventDefault()
       FileIO.load event.originalEvent.dataTransfer.files, (gcode) ->
-        GCodeImporter.importText gcode, @onGcodeLoaded
+        GCodeImporter.importText gcode, @onGcodeLoaded.bind(@)
 
-    GCodeImporter.importPath conf.defaultFilePath, @onGcodeLoaded
+    GCodeImporter.importPath conf.defaultFilePath, @onGcodeLoaded.bind(@)
 
     @renderer = new Renderer $('#renderArea')[0]
 
@@ -66,11 +75,6 @@ class ui
     $('.dg.main').mousedown (e) ->
       e.stopPropagation()
 
-    effectController =
-      gcodeIndex: 10
-      animate: false
-      speed: 0
-      color: [0, 128, 255]
 
     duiControllers.animate = @dui.add(effectController, 'animate').listen()
     duiControllers.gcodeIndex = @dui.add(effectController, 'gcodeIndex', 0,
@@ -80,4 +84,4 @@ class ui
         duiControllers.animate.setValue(false)
 
 
-$ -> new ui
+$ -> window.ui = new ui
