@@ -3,11 +3,6 @@ autoRotate = false
 
 class Renderer
 
-  conf =
-    fov: 45
-    near: 1
-    far: 10000
-    z: 300
 
   refreshSize: ->
     width = $(@container).width()
@@ -16,24 +11,29 @@ class Renderer
     @camera.aspect = width/height
     @camera.updateProjectionMatrix()
     @renderer.setSize(width, height)
-    # if @effectFXAA
-    #   @effectFXAA.uniforms['resolution'].value.set(1/width, 1/height)
+    if @effectFXAA
+      @effectFXAA.uniforms['resolution'].value.set(1/width, 1/height)
     @controls.handleResize()
     @composer.reset()
 
   onGcodeLoaded: (gcode) ->
     @gp = new GCodeParser
-    @gm = @gp.parse gcode
     @gr = new GCodeRenderer
+    @gm = @gp.parse gcode
     gcodeObj = @gr.render(@gm)
 
-    @ui.duiControllers.gcodeIndex.max(@gr.viewModels.length - 1)
-    @ui.duiControllers.gcodeIndex.setValue(0)
-    @ui.duiControllers.animate.setValue(true)
+    window.gr = @gr
+    window.r = @
+
+    @ui.controllers.gcodeIndex.max(@gr.viewModels.length - 1)
+    @ui.controllers.gcodeIndex.setValue(0)
+    @ui.controllers.animate.setValue(true)
 
     @camera.position.z = 500
     @camera.position.y = -1500
     @camera.lookAt(@gr.center)
+    console.log gr
+    # @controls.target = @gr.center.clone()
 
     if @object
       @scene.remove @object
@@ -71,6 +71,12 @@ class Renderer
     #   light.position.set(position[0], position[1], position[2]).normalize()
     #   @scene.add light
 
+    conf =
+      fov: 45
+      near: 1
+      far: 10000
+      z: 300
+
     # Create camera
     aspect = window.innerWidth/window.innerHeight
     console.log aspect
@@ -85,7 +91,7 @@ class Renderer
 
     @composer = new THREE.EffectComposer @renderer
     @composer.addPass new THREE.RenderPass(@scene, @camera)
-    # @effectFXAA = new THREE.ShaderPass THREE.ShaderExtras["fxaa"]
+    # @effectFXAA = new THREE.ShaderPass THREE.FXAAShader
     # @composer.addPass @effectFXAA # Antialas?
     # @composer.addPass new THREE.BloomPass(0.4)
     effectScreen = new THREE.ShaderPass(THREE.ShaderExtras["screen"])
@@ -114,7 +120,6 @@ class Renderer
 
   render: ->
     time = Date.now() * 0.0005
-    # console.log 'update?'
 
     for object in @scene.children
       if autoRotate and object instanceof THREE.Object3D

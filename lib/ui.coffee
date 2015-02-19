@@ -5,17 +5,20 @@ window.openLoadDialog = ->
 window.effectController =
   gcodeIndex: 10
   animate: false
+  motionLine: true
+  feedLine: true
+  feedIncLine: true
   speed: 0
   color: [0, 128, 255]
 
 class ui
 
-  duiControllers:
+  controllers:
     gcodeIndex: null
     animate: null
 
   conf =
-    defaultFilePath: 'models/companion_cube.gcode'
+    defaultFilePath: 'models/octocat.gcode'
 
   onGcodeLoaded: (gcode) ->
     @renderer.onGcodeLoaded(gcode)
@@ -55,12 +58,16 @@ class ui
     $('.dg.main').mousedown (e) ->
       e.stopPropagation()
 
-    @duiControllers.animate = @dui.add(effectController, 'animate').listen()
-    @duiControllers.gcodeIndex = @dui.add(effectController, 'gcodeIndex', 0,
+    @controllers.animate = @dui.add(effectController, 'animate').listen()
+    @controllers.motionLine = @dui.add(effectController, 'motionLine').listen()
+    @controllers.feedLine = @dui.add(effectController, 'feedLine').listen()
+    @controllers.feedIncLine = @dui.add(effectController, 'feedIncLine').listen()
+    @controllers.gcodeIndex = @dui.add(effectController, 'gcodeIndex', 0,
+
       1000, 1000).listen()
-    @duiControllers.gcodeIndex.onChange (val) =>
+    @controllers.gcodeIndex.onChange (val) =>
       if effectController.animate
-        @duiControllers.animate.setValue(false)
+        @controllers.animate.setValue(false)
 
 
 $ -> window.ui = new ui
