@@ -33,7 +33,7 @@ Renderer = (@container, @ui) ->
 
   @onGcodeLoaded = (gcode) =>
     @gr = new GCodeRenderer
-    gcodeObj = @gr.render(ParseGCode(gcode))
+    gcodeObj = @gr.render(new GCodeModel(gcode))
 
     window.gr = @gr
     window.r = @
