@@ -7,11 +7,11 @@ window.effectController =
   animate: false
   motionLine: true
   feedLine: true
-  feedIncLine: true
+  # feedIncLine: true
   speed: 0
   color: [0, 128, 255]
 
-class ui
+class Ui
 
   controllers:
     gcodeIndex: null
@@ -61,7 +61,7 @@ class ui
     @controllers.animate = @dui.add(effectController, 'animate').listen()
     @controllers.motionLine = @dui.add(effectController, 'motionLine').listen()
     @controllers.feedLine = @dui.add(effectController, 'feedLine').listen()
-    @controllers.feedIncLine = @dui.add(effectController, 'feedIncLine').listen()
+    # @controllers.feedIncLine = @dui.add(effectController, 'feedIncLine').listen()
     @controllers.gcodeIndex = @dui.add(effectController, 'gcodeIndex', 0,
       1000, 1000).listen()
 
@@ -71,6 +71,6 @@ class ui
 
     @controllers.motionLine.onChange => @renderer.refreshObject()
     @controllers.feedLine.onChange => @renderer.refreshObject()
-    @controllers.feedIncLine.onChange => @renderer.refreshObject()
+    # @controllers.feedIncLine.onChange => @renderer.refreshObject()
 
-$ -> window.ui = new ui
+$ -> window.ui = new Ui
