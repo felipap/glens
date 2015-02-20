@@ -69,5 +69,4 @@ class ui
       if effectController.animate
         @controllers.animate.setValue(false)
 
-
 $ -> window.ui = new ui
