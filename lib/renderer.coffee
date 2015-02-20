@@ -28,24 +28,23 @@ Renderer = (@container, @ui) ->
     if @stats then @stats.update()
 
   #
+  @refreshObject = () ->
+    @gr.refresh()
 
   @onGcodeLoaded = (gcode) =>
     @gr = new GCodeRenderer
-    @gm = ParseGCode(gcode)
-    gcodeObj = @gr.render(@gm)
+    gcodeObj = @gr.render(ParseGCode(gcode))
 
     window.gr = @gr
     window.r = @
 
-    @ui.controllers.gcodeIndex.max(@gr.viewModels.length - 1)
+    @ui.controllers.gcodeIndex.max(@gr.modelViews.length - 1)
     @ui.controllers.gcodeIndex.setValue(0)
     @ui.controllers.animate.setValue(true)
 
     @camera.position.z = 500
     @camera.position.y = -1500
-    @camera.lookAt(@gr.center)
-    console.log gr
-    # @controls.target = @gr.center.clone()
+    @camera.lookAt(@gr.getCenter())
 
     if @object
       @scene.remove @object

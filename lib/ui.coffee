@@ -63,10 +63,14 @@ class ui
     @controllers.feedLine = @dui.add(effectController, 'feedLine').listen()
     @controllers.feedIncLine = @dui.add(effectController, 'feedIncLine').listen()
     @controllers.gcodeIndex = @dui.add(effectController, 'gcodeIndex', 0,
-
       1000, 1000).listen()
+
     @controllers.gcodeIndex.onChange (val) =>
       if effectController.animate
         @controllers.animate.setValue(false)
+
+    @controllers.motionLine.onChange => @renderer.refreshObject()
+    @controllers.feedLine.onChange => @renderer.refreshObject()
+    @controllers.feedIncLine.onChange => @renderer.refreshObject()
 
 $ -> window.ui = new ui
