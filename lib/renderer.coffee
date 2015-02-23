@@ -87,7 +87,7 @@ Renderer = (@container, @ui) ->
   # Lights...
   [[ 0, 0, 1, 0xFFFFCC],
    [ 0, 1, 0, 0xFFCCFF],
-   [ 1, 0, 0, 0xCCFFFF],
+   [ 1, 0, 0, 0xFFFFFF],
    [ 0, 0,-1, 0xCCCCFF],
    [ 0,-1, 0, 0xCCFFCC],
    [-1, 0, 0, 0xFFCCCC]].forEach (position) =>
