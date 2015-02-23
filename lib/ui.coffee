@@ -17,11 +17,10 @@ class Ui
     gcodeIndex: null
     animate: null
 
-  conf =
-    defaultFilePath: 'models/octocat.gcode'
+  defaultImportPath = 'models/octocat.gcode'
 
-  onGcodeLoaded: (gcode) ->
-    @renderer.onGcodeLoaded(gcode)
+  onGcodeLoaded: (model) ->
+    @renderer.onGcodeLoaded(model)
     $('#loadModal').modal 'hide'
 
   constructor: () ->
@@ -30,25 +29,13 @@ class Ui
       alert 'Sorry, you need a WebGL capable browser to use this.'
       return false
 
-    $('.gcode_examples a').on 'click', (e) =>
-      e.preventDefault()
-      GCodeImporter.importPath $(e.target).attr('href'), @onGcodeLoaded.bind(@)
-      false
-
-    $('body').on 'dragover', (e) =>
-      e.stopPropagation()
-      e.preventDefault()
-      e.originalEvent.dataTransfer.dropEffect = 'copy'
-
-    $('body').on 'drop', (e) =>
-      e.stopPropagation()
-      e.preventDefault()
-      FileIO.load event.originalEvent.dataTransfer.files, (gcode) ->
-        GCodeImporter.importText gcode, @onGcodeLoaded.bind(@)
-
-    GCodeImporter.importPath conf.defaultFilePath, @onGcodeLoaded.bind(@)
+    if !Modernizr.localstorage
+      alert 'Man, your browser is ancient. WTF Can\'t work like this!'
+      return false
 
     @renderer = new Renderer $('#renderArea')[0], @
+
+    GCodeImporter.setup(@onGcodeLoaded.bind(@), defaultImportPath)
 
     @setupDatGUI()
 

@@ -1,4 +1,9 @@
 
+###*
+ * GCodePainter
+ * Renders
+###
+
 class GCodePainter
 
   constructor: ->

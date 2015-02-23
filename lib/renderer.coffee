@@ -22,8 +22,8 @@ Renderer = (@container, @ui) ->
     @container.appendChild @stats.domElement
 
   animate = =>
-    # requestAnimationFrame animate.bind(@)
-    setTimeout animate.bind(@), 100
+    requestAnimationFrame animate.bind(@)
+    # setTimeout animate.bind(@), 100
     @render()
     if @stats then @stats.update()
 
@@ -31,9 +31,9 @@ Renderer = (@container, @ui) ->
   @refreshObject = () ->
     @gr.refresh()
 
-  @onGcodeLoaded = (gcode) =>
+  @onGcodeLoaded = (gcodeModel) =>
     @gr = new GCodeRenderer
-    gcodeObj = @gr.render(new GCodeModel(gcode))
+    gcodeObj = @gr.render(gcodeModel)
 
     window.gr = @gr
     window.r = @
