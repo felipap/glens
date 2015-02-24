@@ -38,9 +38,9 @@ Renderer = (@container, @ui) ->
     window.gr = @gr
     window.r = @
 
-    @ui.controllers.gcodeIndex.max(@gr.modelViews.length - 1)
-    @ui.controllers.gcodeIndex.setValue(0)
-    @ui.controllers.animate.setValue(true)
+    # @ui.controllers.gcodeIndex.max(@gr.modelViews.length - 1)
+    # @ui.controllers.gcodeIndex.setValue(0)
+    # @ui.controllers.animate.setValue(true)
 
     @camera.position.z = 500
     @camera.position.y = -1500

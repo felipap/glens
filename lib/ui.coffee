@@ -40,24 +40,24 @@ class Ui
     @setupDatGUI()
 
   setupDatGUI: () ->
-    @dui = new dat.GUI()
+    # @dui = new dat.GUI()
 
     $('.dg.main').mousedown (e) ->
       e.stopPropagation()
 
-    @controllers.animate = @dui.add(effectController, 'animate').listen()
-    @controllers.motionLine = @dui.add(effectController, 'motionLine').listen()
-    @controllers.feedLine = @dui.add(effectController, 'feedLine').listen()
-    # @controllers.feedIncLine = @dui.add(effectController, 'feedIncLine').listen()
-    @controllers.gcodeIndex = @dui.add(effectController, 'gcodeIndex', 0,
-      1000, 1000).listen()
+    # @controllers.animate = @dui.add(effectController, 'animate').listen()
+    # @controllers.motionLine = @dui.add(effectController, 'motionLine').listen()
+    # @controllers.feedLine = @dui.add(effectController, 'feedLine').listen()
+    # # @controllers.feedIncLine = @dui.add(effectController, 'feedIncLine').listen()
+    # @controllers.gcodeIndex = @dui.add(effectController, 'gcodeIndex', 0,
+    #   1000, 1000).listen()
 
-    @controllers.gcodeIndex.onChange (val) =>
-      if effectController.animate
-        @controllers.animate.setValue(false)
+    # @controllers.gcodeIndex.onChange (val) =>
+    #   if effectController.animate
+    #     @controllers.animate.setValue(false)
 
-    @controllers.motionLine.onChange => @renderer.refreshObject()
-    @controllers.feedLine.onChange => @renderer.refreshObject()
-    # @controllers.feedIncLine.onChange => @renderer.refreshObject()
+    # @controllers.motionLine.onChange => @renderer.refreshObject()
+    # @controllers.feedLine.onChange => @renderer.refreshObject()
+    # # @controllers.feedIncLine.onChange => @renderer.refreshObject()
 
 $ -> window.ui = new Ui
