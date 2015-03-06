@@ -27,6 +27,7 @@
     <script src="js/bootstrap.js"></script>
     <script src="js/sugar-1.4.1.min.js"></script>
     <script src="js/three.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <script src="js/three.trackball-controls.js"></script>
     <script src="js/three.orbit-controls.js"></script>
     <script src="js/dat.gui.min.js"></script>
@@ -53,12 +54,18 @@
     <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
       <div class="container">
         <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
           <a class="navbar-brand" href="#">
-            <img alt="Brand" src="/delta.png" style="display: inline-block" height=20>
+            <img alt="Brand" src="delta.png" style="display: inline-block" height=20>
             <span style="font-weight: bold; vertical-align: middle">Glens</span>
           </a>
         </div>
-        <div class="collapse navbar-collapse">
+        <div class="collapse navbar-collapse" id="nav-collapse">
           <ul class="nav navbar-nav">
           <div class="navbar-text">A Delta Thinkers Production</div>
           </ul>
@@ -90,14 +97,15 @@
           <div class="modal-body">
             <h4>Examples</h4>
             <ul class="gcode_examples">
-              <li><a href="models/15mm_cube.gcode">15mm_cube.gcode</a></li>
-              <li><a href="models/octocat.gcode">octocat.gcode</a></li>
-              <li><a href="models/CompanionCube.gcode">CompanionCube.gcode</a></li>
-              <li><a href="models/part.gcode">part.gcode</a></li>
-              <li><a href="models/hand_ok.gcode">hand_ok.gcode</a></li>
-              <li><a href="models/linkBracelet.gcode">linkBracelet.gcode</a></li>
-              <li><a href="models/linkBracelet150.gcode">linkBracelet150.gcode</a></li>
-              <li><a href="models/companion_cube.gcode">companion_cube.gcode</a></li>
+              <li><a href="models/chaveiro.gcode">Chaveiro</a></li>
+              <li><a href="models/15mm_cube.gcode">15mm_cube</a></li>
+              <li><a href="models/octocat.gcode">octocat</a></li>
+              <li><a href="models/CompanionCube.gcode">CompanionCube</a></li>
+              <li><a href="models/part.gcode">part</a></li>
+              <li><a href="models/hand_ok.gcode">hand_ok</a></li>
+              <li><a href="models/linkBracelet.gcode">linkBracelet</a></li>
+              <li><a href="models/linkBracelet150.gcode">linkBracelet150</a></li>
+              <li><a href="models/companion_cube.gcode">companion_cube</a></li>
             </ul>
             <p>To view your own model, <strong>drag a gcode file from your desktop and drop it in this window</strong>.</p>
           </div>

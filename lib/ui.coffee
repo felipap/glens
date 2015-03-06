@@ -11,6 +11,15 @@ window.effectController =
   speed: 0
   color: [0, 128, 255]
 
+
+oldAlert = window.alert
+
+window.alert = () ->
+  if window.Android
+    Android.showToast(arguments[0])
+  else
+    oldAlert.apply(null, arguments)
+
 class Ui
 
   controllers:
@@ -24,6 +33,9 @@ class Ui
     $('#loadModal').modal 'hide'
 
   constructor: () ->
+
+    console.log 'Starting Ui'
+    alert('oiem')
 
     if !Modernizr.webgl
       alert 'Sorry, you need a WebGL capable browser to use this.'

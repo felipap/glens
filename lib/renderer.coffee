@@ -3,6 +3,8 @@ autoRotate = false
 
 Renderer = (@container, @ui) ->
 
+  console.log 'Starting renderer'
+
   refreshSize = =>
     width = $(@container).width()
     height = $(@container).height()
